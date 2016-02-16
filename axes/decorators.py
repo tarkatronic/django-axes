@@ -64,7 +64,6 @@ if (isinstance(COOLOFF_TIME, int) or isinstance(COOLOFF_TIME, float) ):
 
 LOGGER = getattr(settings, 'AXES_LOGGER', 'axes.watch_login')
 
-LOCKOUT_TEMPLATE = getattr(settings, 'AXES_LOCKOUT_TEMPLATE', None)
 VERBOSE = getattr(settings, 'AXES_VERBOSE', True)
 
 # whitelist and blacklist
@@ -334,6 +333,8 @@ def watch_login(func):
 
 
 def lockout_response(request):
+    LOCKOUT_TEMPLATE = getattr(settings, 'AXES_LOCKOUT_TEMPLATE', None)
+
     if LOCKOUT_TEMPLATE:
         context = {
             'cooloff_time': COOLOFF_TIME,

@@ -214,3 +214,12 @@ class AccessAttemptTest(TestCase):
         extra_data = {string.ascii_letters * x: x for x in range(0, 1000)}  # An impossibly large post dict
         self._login(**extra_data)
         self.assertEquals(len(AccessAttempt.objects.latest('id').post_data), 1024)
+
+    @override_settings(AXES_LOCKOUT_TEMPLATE='axes/test_lockout.html')
+    def test_lockout_template(self):
+        for i in range(1, FAILURE_LIMIT):
+            response = self._login(is_valid_username=True, is_valid_password=False)
+
+        response = self._login(is_valid_username=True, is_valid_password=False)
+        self.assertContains(response, 'Limit: %s' % FAILURE_LIMIT)
+        self.assertContains(response, 'Cooloff: %s' % COOLOFF_TIME.seconds)
